@@ -9,6 +9,7 @@
           Enter dream info
         </div>
         <div class="tab" :class="(step === 3) ? 'active': ''">
+          
           Share?
         </div>
       </div>
@@ -48,13 +49,15 @@
       <div class="button-holder">
 
         <b-button @click="step -= 1" v-if="step > 1" >
+            <font-awesome-icon icon="arrow-left" />
             Prev
         </b-button>
         <div></div>
         <b-button @click="step += 1" v-if="step < 3">
-            Next
+            Next <font-awesome-icon icon="arrow-right" />
         </b-button>
-        <b-button @click="step += 1" v-else>
+        <b-button @click="saveDream" v-else>
+            <font-awesome-icon icon="check-double" />
             Complete
         </b-button>
 
@@ -64,6 +67,8 @@
 </template>
 
 <script>
+import '../icons';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'home',
@@ -84,6 +89,20 @@ export default {
         { value: 'no', text: 'No' },
       ]
     }
+  },
+  methods: {
+    ...mapActions(['actionSaveDream']),
+    saveDream() {
+      const dream = {
+        description: this.description,
+        when: this.when,
+        dreamPower: this.dreamPower,
+        share: this.share
+      };
+      this.actionSaveDream(dream);
+      this.$router.push({name:'list'})
+    }
+
   }
 }
 </script>
@@ -101,6 +120,7 @@ export default {
 $dlg-color: rgb(228, 228, 228);
 $border-radius: 15px;
 .home {
+  background: rgba(white, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
